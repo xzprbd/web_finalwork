@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>世界人口格局将如何变化？</title>
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/leaflet.css">
+		<link rel="stylesheet" type="text/css" href="ChartStyle.css">
+		<script type="text/javascript" src="lib/jquery-3.3.1.js"></script>
+		<script type="text/javascript" src="lib/leaflet.js"></script>
+		<script src="http://api.asilu.com/cdn/jquery.js,jquery.backstretch.min.js" type="text/javascript"></script>
+		<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js" type="text/javascript"></script>
+<style>
+		.map1 { height: 700px; width: 80%; left: 10%; right: 10%;}
+		.map2 { height: 700px; width: 80%; left: 10%; }
+		#panel {
+    width: 26%;
+    padding: 20px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    line-height: 42px;
+}
+
+.range-slider {
+    width: 60%;
+}
+
+#forward {
+    float: right;
+}
+
+#reverse {
+    float: left;
+	left: 50%;
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+.loopimg{
+ width: 4137px;
+ height: 400px;
+ margin: 0px auto;
+ padding: 0px;
+ overflow: hidden;
+}
+.loopimg > ul{ 
+ width: 100%;
+ /*动画名称*/
+ animation-name: move;
+ /*动画时间*/
+ animation-duration: 20s;
+ /*动画次数*/
+ animation-iteration-count: infinite;
+ /*匀速*/
+ animation-timing-function: linear;
+  }
+.loopimg > ul > li{
+ float: left;
+ list-style: none;
+ }
+#foot{
+ border: 3px #FED976;
+ height: 250px;
+ width: 100%;
+ text-align: center;
+}
+@keyframes move {
+  /*动画起始位置*/
+  0%{
+  transform: translateX(0px);
+  }
+ /*动画结束状态*/
+ 100%{
+  transform: translateX(-700px);
+  }
+ }
+ .nav{
+     background-image: url("img/背景.jpg");
+     height:140px;/*高度140像素*/
+     width: 100%;/*宽度为<body>的100%，也就是相同宽度*/
+     line-height:80px;/*行高，看文字位置你就明白了*/
+     position: absolute;/*绝对定位*/
+     top: 0px;/*距离顶部0像素*/
+     left: 0;/*距离左侧边界0px*/
+ }
+ .nav li{
+     float:left;/*浮动*/
+     width:150px;
+     text-align:center;/*文本居中*/
+	 
+ }
+ .ul_top{
+     list-style: none;/*去除列表格式，消除小黑点*/
+     position: absolute;
+     top: 50px;/*距离顶部70px*/
+     left: 60px;/*距离左侧70px*/
+ }
+ .nav a{
+     display:block;/*块状显示，一块块的整齐*/
+     color:white;/*内容颜色白色*/
+     text-decoration: none;/*去掉下划线*/
+     width: 100px;/*每个宽度80px*/
+     line-height: 30px;/*行高30px*/
+ }
+ .nav a:hover{
+     color:white;/*鼠标置于上方显示白色*/
+     background:green;/*背景色为绿色*/
+ }
+ 
+ 
+</style>
+	</head>
+
+	<body>
+		<script type="text/javascript">
+		$.backstretch([
+		        "img/background.jpg",
+		        'http://api.asilu.com/cdn/img/bg/445.jpg',
+		        'http://api.asilu.com/cdn/img/bg/446.jpg',
+		        'http://api.asilu.com/cdn/img/bg/447.jpg',
+		        'http://api.asilu.com/cdn/img/bg/448.jpg'
+		    ], {
+		        fade : 1000, // 动画时长
+		        duration : 2000 // 切换延时
+		});
+		</script>
+		<div align="center">
+			<div class="nav" >
+			    <ul class="ul_top">
+			        <li><a href="#map1">external geojson</a></li>
+			        <li><a href="#map2">Proportional map1</a></li>
+			        <li><a href="#map3">Proportional map2</a></li>
+			        <li><a href="#map4">Choropleth map</a></li>
+			    </ul>
+			</div>
+			<p>
+				/</br>
+				/</br>
+				/</br>
+				/</br>
+				/</br>
+			</p>
+			<h1>世界人口格局将如何变化？</h1>
+			<p>根据联合国预测,印度人口数量将会在2023年4月中旬超过我国，成为全球第一人口大国。让我们来解读一下世界人口变化情况。</p>
+			<h2>1.人口增长</h2>
+			<p>当前世界人口数量是二十世纪中期的三倍多。1950年，全球人口约为25亿，到2022年11月中旬，这一数字已达80亿，自2010年以来增加了10亿，自1998年以来增加了20亿。预计在未来30年，世界人口将增加近20亿，从目前的80亿增至2050年的97亿，并可能在2080年代中期达到近104亿的峰值。</br>
+　　			   全球人口急剧增长的主要原因是存活到生育年龄的人口数量不断增加、人类寿命逐渐延长、城市化不断发展以及移徙不断加速。生育率也随之发生重大变化。这些趋势将对子孙后代产生深远影响。</br>
+			</p>
+			<a href="https://www.worldometers.info/cn/" target="-blank" >
+				<p>世界人口数量实时统计网站</p>	
+				<img src="img/pic1.jpg" width="800" height="540" style="z-index: 999;"/></br>
+			</a>	
+			<a href="https://www.un.org/zh/dayof8billion">2.八十亿人口日</a>
+			<p>2022年11月15日，世界人口达到80亿，这是人类发展的一个里程碑。全球人口从70亿增长到80亿花了12年的时间，而从80亿到90亿则需要大约15年的时间（到2037年），这表明全球人口的总体增长速度正在放缓。然而，一些国家的生育率仍然很高。生育率最高的国家往往是人均收入最低的国家。因此，随着时间的推移，全球人口增长会越来越集中在世界上最贫穷的国家，其中大多数位于撒哈拉以南非洲。</p>
+			<table><tr>
+			<td><img src="img/pic2.jpg" width="500" height="610"  border=0 /></td>
+			<td><img src="img/图片6.jpg" width="500" height="610"  border=0 /></td>
+			</tr></table> 
+			<h2>3.中国和印度：人口最多的国家</h2>
+			<p>全球人口中有55%（44亿）生活在亚洲，17%（13亿）生活在非洲，14%（11.2亿）生活在欧洲和北美洲，8%（6.58亿）生活在拉丁美洲及加勒比（地区），其余1%生活在大洋洲（4300万）。中国（14亿）和印度（14亿）仍然是世界上两个人口最多的国家，其数量均超过了10亿，分别占世界总人口的近18％。联合国预测：印度人口数量将在2023年4月中旬超过中国，成为全球第一人口大国。自1947年印度独立后，至今其人口增长了超10亿，并且预计在未来的40年里还将继续增长。而中国的人口将在2019年至2050年间减少4800万，即2.7%左右。（资料来源:《2022年世界人口展望》和人口基金数据门户网站）
+			</p>
+			<img src="img/pic3.jpg" width="848" height="500" style="z-index: 999;"/>
+			<h2>4.非洲：人口增长最快的大陆</h2>
+			<p>预计从现在到2050年，非洲将占全球人口增长的一半以上。非洲是所有主要地区中人口增长率最高的地区，预计到2050年，撒哈拉以南非洲的人口将翻一番。据计，即使非洲的生育水平在不远的将来出现大幅下降，该地区的人口仍将继续高速增长。虽然非洲生育率未来的趋势存在一定的不确定性，但是有一点是肯定的：非洲大陆当前有大量青年，他们将在未来几年进入成年期并生育子女，因此，非洲在未来几十年将在世界人口规模和分布方面发挥核心作用。</p>
+			<img src="img/图片7.jpg" width="848" height="500" style="z-index: 999;"/>
+			<h2>5.欧洲：人口减少</h2>
+			<p>与非洲形成鲜明对比的是，到2050年，世界上有61个国家或地区的人口预计将会减少，其中26个国家或地区的人口将减少10%以上。预计波斯尼亚和黑塞哥维那共和国、保加利亚、克罗地亚、匈牙利、日本、拉脱维亚、立陶宛、摩尔多瓦共和国、罗马尼亚、塞尔维亚和乌克兰等国人口到2050年将减少15%以上。目前，所有欧洲国家的生育率都低于实现全面人口更替的水平（大约每名妇女平均生育2.1个子女），数十年来，大多数欧洲国家的生育率一直低于人口更替水平。</p>	
+			<img src="img/图片8.jpg" width="848" height="500" style="z-index: 999;"/>
+			<h2>
+				6.世界人口最多的十个国家代表性景观
+			</h2>
+			<div class="loopimg">
+			       <ul>
+			        <li>
+			         <img src="img/中国长城.jpg" height="400px"/>
+			        </li>
+			        <li>
+			         <img src="img/美国白宫.jpg" height="400px"/>
+			        </li>
+			        <li>
+			         <img src="img/印尼爪哇日惹婆罗浮屠寺.jpg" height="400px"/>
+			        </li>
+			        <li>
+			         <img src="img/巴西耶稣山.jpg" height="400px"/>
+			        </li>
+			        <li>
+			         <img src="img/巴基斯坦纪念碑.jpg" height="400px"/>
+			        </li>
+			        <li>
+			         <img src="img/尼日利亚拉各斯.jpg" height="400px"/>
+			        </li>
+					<li>
+					 <img src="img/孟加拉国首都达卡.jpg" height="400px"/>
+					</li>
+					<li>
+					 <img src="img/莫斯科红场.jpg" height="400px"/>
+					</li>
+					<li>
+					 <img src="img/墨西哥特奥蒂瓦坎金字塔.jpg" height="400px"/>
+					</li>
+			       </ul>
+			</div>
+			<h1>1985-2015年世界重要城市人口数量变迁图：<style="text-align: center;font-size: 1.6875rem;"></h1>
+		</div>
+		
+		<a name="map1"></a>
+		<div align="center">
+			<p>Map 3: Load external geojson file</p>
+		</div>
+		<div id="mapid3" class="map1"></div>
+		<a name="map2"></a>
+		<div align="center">
+			<h2>世界重要城市人口成比例显示地图</h2>
+			<p>Map 4: Proportional map and retrieve information from features</p>
+		</div>
+		<div id="mapid4" class="map1"></div>
+		<a name="map3"></a>
+		<div align="center">
+			<h2>世界重要城市人口成比例显示地图</h2>
+			<p>Map 5: Proportional map</p>
+		</div>
+		<div id="mapid5" class="map2"></div>
+		<div id="panel"></div>
+		<a name="map4"></a>
+		<div align="center">
+			<h2>2015年美国人口分级统计分区显示地图</h2>
+			<p>Map 6: Choropleth map</p>
+		</div>
+		<div id="mapid6" class="map1"></div>		
+		<script type="text/javascript">
+			var YOUR_KEY = 'pk.eyJ1IjoieHpwcmJkIiwiYSI6ImNsY2E4YmoyeTBycTg0MWxoeGhkbm50aDYifQ.NzWYpLWA37TumCyfSw5i5g';
+			var tileURL = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=' + YOUR_KEY;
+		</script>
+		<script type="text/javascript" src="js/geojson.js"></script>
+		<script type="text/javascript" src="js/proportional.js"></script>
+		<script type="text/javascript" src="js/sequence.js"></script>
+		<script type="text/javascript" src="js/choropleth.js"></script>
+		
+	</body>
+</html>
